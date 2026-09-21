@@ -13,7 +13,13 @@ vm.createContext(context);
 vm.runInContext(fs.readFileSync(dataPath, "utf8"), context, { filename: dataPath });
 
 const games = context.window.CATALOG_GAMES;
-const pagesUrl = "https://alexbeav.github.io/psxrecomp-ports/";
+const owner = context.window.CATALOG_OWNER;
+
+if (!owner || !owner.pagesUrl) {
+  throw new Error("docs/catalog-data.js must define CATALOG_OWNER with a pagesUrl.");
+}
+
+const pagesUrl = owner.pagesUrl;
 const beginMarker = "<!-- BEGIN GENERATED GAME CATALOG -->";
 const endMarker = "<!-- END GENERATED GAME CATALOG -->";
 
@@ -35,7 +41,7 @@ const rows = [...games]
 
 const catalog = [
   beginMarker,
-  "Use the [sortable game catalog](https://alexbeav.github.io/psxrecomp-ports/) to sort by title, region, BIOS, or player count. Select a title there to see screenshots, known issues, and shipped enhancements.",
+  `Use the [sortable game catalog](${pagesUrl}) to sort by title, region, BIOS, or player count. Select a title there to see screenshots, known issues, and shipped enhancements.`,
   "",
   "| Title | Region | Supported original | BIOS | Players | Releases |",
   "| --- | --- | --- | --- | ---: | --- |",

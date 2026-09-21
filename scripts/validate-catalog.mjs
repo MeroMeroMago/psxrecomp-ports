@@ -20,6 +20,14 @@ vm.createContext(context);
 vm.runInContext(read("docs/catalog-data.js"), context, { filename: "catalog-data.js" });
 
 const games = context.window.CATALOG_GAMES;
+const owner = context.window.CATALOG_OWNER;
+
+if (!owner || !owner.owner || !owner.repository || !owner.pagesUrl) {
+  fail("docs/catalog-data.js: CATALOG_OWNER must define owner, repository and pagesUrl.");
+}
+
+const ownerBase = owner ? `https://github.com/${owner.owner}/` : "";
+const defaultRepository = owner ? `${ownerBase}${owner.repository}` : "";
 const readme = read("README.md");
 const index = read("docs/index.html");
 const bannerPath = path.join(repositoryRoot, "docs", "assets", "alexbeav-ps1-recomps-banner.png");
@@ -40,8 +48,8 @@ for (const game of games) {
 
   if (!Number.isInteger(game.players) || game.players < 1) fail(`${game.title}: invalid player count.`);
   if (!Array.isArray(game.images) || ![0, 2].includes(game.images.length)) fail(`${game.title}: expected zero or two screenshots.`);
-  const releaseRepository = game.repository || "https://github.com/Alexbeav/psxrecomp-ports";
-  if (!releaseRepository.startsWith("https://github.com/Alexbeav/")) fail(`${game.title}: unexpected repository URL.`);
+  const releaseRepository = game.repository || defaultRepository;
+  if (!releaseRepository.startsWith(ownerBase)) fail(`${game.title}: unexpected repository URL.`);
   if (!game.windows.startsWith(`${releaseRepository}/releases/download/`)) fail(`${game.title}: unexpected Windows release URL.`);
   if (game.linux && !game.linux.startsWith(`${releaseRepository}/releases/download/`)) fail(`${game.title}: unexpected Linux release URL.`);
   if (game.macosArm64 && !game.macosArm64.startsWith(`${releaseRepository}/releases/download/`)) fail(`${game.title}: unexpected macOS Apple Silicon release URL.`);

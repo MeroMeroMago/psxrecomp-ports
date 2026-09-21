@@ -1,3 +1,19 @@
+// Deployment identity for this catalog.
+//
+// Single source of truth for the owner and the GitHub Pages URL. Both scripts
+// read this so that moving the fleet to a different GitHub org, or renaming the
+// catalog repository, is a one-line change here instead of a find-and-replace
+// across generated output.
+//
+// After changing a value, run both scripts so generated files follow:
+//   node scripts/render-readme-catalog.mjs
+//   node scripts/validate-catalog.mjs
+window.CATALOG_OWNER = {
+  owner: "Alexbeav",
+  repository: "psxrecomp-ports",
+  pagesUrl: "https://alexbeav.github.io/psxrecomp-ports/",
+};
+
 window.CATALOG_GAMES = [
   {
     slug: "alien-resurrection", title: "Alien Resurrection", region: "Europe", serial: "SLES-02913", bios: "SCPH-5552", players: 1, playersLabel: "1 player", discs: 1,
