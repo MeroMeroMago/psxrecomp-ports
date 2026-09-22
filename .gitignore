@@ -53,3 +53,8 @@ out/
 dist/
 __pycache__/
 *.pyc
+
+# Generated code documentation (code-docs/): the engine checkout and built site are rebuilt on demand.
+code-docs/.engine/
+code-docs/site/
+code-docs/doxygen-warnings.log

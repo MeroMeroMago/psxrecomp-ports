@@ -1,0 +1,67 @@
+name: Code documentation
+
+on:
+  push:
+    branches: [code-docs]
+    paths:
+      - "code-docs/**"
+      - "docs/catalog.js"
+      - "scripts/**"
+      - "kits/**"
+      - ".github/workflows/code-docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: code-docs-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install generators
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends doxygen graphviz
+          python -m pip install --upgrade pip
+          python -m pip install mkdocs-material
+          doxygen --version
+          dot -V
+
+      - name: Build site
+        shell: pwsh
+        run: ./code-docs/scripts/build.ps1
+
+      - name: Show Doxygen warning count
+        if: always()
+        run: |
+          if [ -f code-docs/doxygen-warnings.log ]; then
+            wc -l code-docs/doxygen-warnings.log
+            head -50 code-docs/doxygen-warnings.log
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: code-docs/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

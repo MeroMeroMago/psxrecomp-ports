@@ -1,0 +1,102 @@
+site_name: PSXRecomp Ports — Code Guide
+site_description: Architecture guide and annotated source walk-throughs for the psxrecomp-ports catalog, the Diablo owned-input kit, and the PSXRecomp engine.
+site_author: psxrecomp-ports contributors
+repo_url: https://github.com/alexbeavs-ps1-ports/psxrecomp-ports
+repo_name: psxrecomp-ports
+edit_uri: ""
+docs_dir: guide
+site_dir: site
+use_directory_urls: true
+
+# Links into the Doxygen output (site/api/) are not Markdown pages, so MkDocs
+# cannot validate them; scripts/check-links.py checks every link in the built
+# site instead. Nav entries and anchors stay strictly validated.
+validation:
+  links:
+    not_found: info
+    anchors: warn
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path:
+        - "."
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.keys
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Ports repository:
+      - Overview: ports/overview.md
+      - Catalog site (catalog.js): ports/catalog-site.md
+      - Catalog scripts: ports/catalog-scripts.md
+      - Kit setup pipeline (SETUP.ps1): ports/kit-setup.md
+      - Disc extractor (extract_boot_exe.py): ports/kit-extractor.md
+      - Kit build and manifests: ports/kit-build.md
+  - PSXRecomp engine:
+      - Overview: engine/overview.md
+      - Recompiler (MIPS to C): engine/recompiler.md
+      - Runtime subsystems: engine/runtime.md
+      - BIOS tiers: engine/bios-tiers.md
+      - Overlays: engine/overlays.md
+      - Tools: engine/tools.md
+      - Reading paths: engine/reading-paths.md
+  - Building these docs: building.md

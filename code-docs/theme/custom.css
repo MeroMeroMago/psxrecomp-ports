@@ -1,0 +1,18 @@
+/* Small overrides on top of doxygen-awesome for the PSXRecomp Ports reference. */
+html {
+  --primary-color: #5e35b1;
+  --primary-dark-color: #4527a0;
+  --primary-light-color: #9575cd;
+  --side-nav-width: 320px;
+}
+html.dark-mode {
+  --primary-color: #b39ddb;
+  --primary-dark-color: #9575cd;
+  --primary-light-color: #d1c4e9;
+}
+/* Keep long call graphs scrollable instead of overflowing the content column. */
+div.dyncontent, .dotgraph { overflow-x: auto; }
+/* A discreet back-link to the guide in the project title area. */
+#projectbrief::after {
+  content: " · ";
+}

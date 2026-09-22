@@ -1,0 +1,161 @@
+# Doxyfile for the PSXRecomp Ports code reference.
+# Run from the code-docs/ directory (scripts/build.ps1 does this).
+# Only keys that differ from Doxygen defaults are listed; `doxygen -x Doxyfile`
+# prints exactly this view. Tested with Doxygen 1.10 and Graphviz 16.
+
+#---------------------------------------------------------------------------
+# Project
+#---------------------------------------------------------------------------
+PROJECT_NAME           = "PSXRecomp Ports — Code Reference"
+PROJECT_BRIEF          = "Catalog site, owned-input kit, and the PSXRecomp recompiler + runtime"
+PROJECT_NUMBER         = "engine 0c4dd09a (2026-08-31)"
+OUTPUT_DIRECTORY       = site
+HTML_OUTPUT            = api
+CREATE_SUBDIRS         = NO
+OUTPUT_LANGUAGE        = English
+GENERATE_LATEX         = NO
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = NO
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = NO
+WARN_LOGFILE           = doxygen-warnings.log
+
+#---------------------------------------------------------------------------
+# Input: this repository's glue code plus the pinned engine checkout
+#---------------------------------------------------------------------------
+INPUT                  = api-mainpage.md \
+                         ../docs/catalog.js \
+                         ../scripts \
+                         ../kits/diablo-usa \
+                         .engine/README.md \
+                         .engine/docs \
+                         .engine/runtime/include \
+                         .engine/runtime/src \
+                         .engine/recompiler/include \
+                         .engine/recompiler/src \
+                         .engine/host \
+                         .engine/psxrecomp_cli.py \
+                         .engine/tools
+INPUT_ENCODING         = UTF-8
+RECURSIVE              = YES
+FILE_PATTERNS          = *.c *.cc *.cpp *.h *.hpp *.inc *.py *.js *.mjs *.ps1 *.md
+EXCLUDE                = .engine/recompiler/lib \
+                         .engine/runtime/third_party \
+                         .engine/runtime/tests \
+                         .engine/recompiler/tests \
+                         .engine/tools/tests \
+                         .engine/docs/ci
+EXCLUDE_PATTERNS       = */node_modules/* */__pycache__/* *.patch
+EXCLUDE_SYMLINKS       = YES
+USE_MDFILE_AS_MAINPAGE = api-mainpage.md
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = .engine \
+                         ..
+STRIP_FROM_INC_PATH    = .engine/runtime/include \
+                         .engine/recompiler/include
+MARKDOWN_SUPPORT       = YES
+TOC_INCLUDE_HEADINGS   = 3
+AUTOLINK_SUPPORT       = YES
+
+# Languages Doxygen cannot parse natively are mapped onto its C++ parser after
+# passing through a line-preserving filter (see filters/). The source browser
+# still shows the original file because FILTER_SOURCE_FILES is NO.
+EXTENSION_MAPPING      = js=C++ mjs=C++ ps1=C++ inc=C
+FILTER_PATTERNS        = *.ps1="python filters/ps1_filter.py" \
+                         *.js="python filters/js_filter.py" \
+                         *.mjs="python filters/js_filter.py"
+FILTER_SOURCE_FILES    = NO
+
+#---------------------------------------------------------------------------
+# What to extract: everything, documented or not
+#---------------------------------------------------------------------------
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_ANON_NSPACES   = YES
+CASE_SENSE_NAMES       = NO
+SORT_MEMBER_DOCS       = NO
+SHOW_INCLUDE_FILES     = YES
+SHOW_USED_FILES        = YES
+SHOW_FILES             = YES
+JAVADOC_AUTOBRIEF      = YES
+QT_AUTOBRIEF           = YES
+BUILTIN_STL_SUPPORT    = YES
+TYPEDEF_HIDES_STRUCT   = YES
+NUM_PROC_THREADS       = 0
+TIMESTAMP              = DATETIME
+
+#---------------------------------------------------------------------------
+# Source browsing: read the code from the docs
+#---------------------------------------------------------------------------
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+STRIP_CODE_COMMENTS    = NO
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+REFERENCES_LINK_SOURCE = YES
+SOURCE_TOOLTIPS        = YES
+VERBATIM_HEADERS       = YES
+ALPHABETICAL_INDEX     = YES
+
+#---------------------------------------------------------------------------
+# HTML output
+#---------------------------------------------------------------------------
+GENERATE_HTML          = YES
+HTML_COLORSTYLE        = LIGHT
+HTML_EXTRA_STYLESHEET  = theme/doxygen-awesome.css \
+                         theme/doxygen-awesome-sidebar-only.css \
+                         theme/doxygen-awesome-sidebar-only-darkmode-toggle.css \
+                         theme/custom.css
+HTML_EXTRA_FILES       = theme/doxygen-awesome-darkmode-toggle.js \
+                         theme/doxygen-awesome-fragment-copy-button.js \
+                         theme/doxygen-awesome-paragraph-link.js \
+                         theme/doxygen-awesome-interactive-toc.js
+HTML_HEADER            = theme/header.html
+HTML_DYNAMIC_MENUS     = YES
+HTML_DYNAMIC_SECTIONS  = NO
+HTML_CODE_FOLDING      = YES
+HTML_COPY_CLIPBOARD    = NO
+GENERATE_TREEVIEW      = YES
+FULL_SIDEBAR           = NO
+DISABLE_INDEX          = NO
+TREEVIEW_WIDTH         = 320
+ENUM_VALUES_PER_LINE   = 1
+SEARCHENGINE           = YES
+SERVER_BASED_SEARCH    = NO
+OBFUSCATE_EMAILS       = YES
+
+#---------------------------------------------------------------------------
+# Graphs (Graphviz): call graphs, include graphs, directory graphs
+#---------------------------------------------------------------------------
+HAVE_DOT               = YES
+DOT_PATH               = $(PSX_DOCS_DOT_PATH)
+DOT_NUM_THREADS        = 0
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+GROUP_GRAPHS           = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+GRAPHICAL_HIERARCHY    = YES
+DIRECTORY_GRAPH        = YES
+DIR_GRAPH_MAX_DEPTH    = 2
+DOT_GRAPH_MAX_NODES    = 80
+MAX_DOT_GRAPH_DEPTH    = 3
+DOT_MULTI_TARGETS      = YES
+DOT_CLEANUP            = YES
+GENERATE_LEGEND        = YES
+
+#---------------------------------------------------------------------------
+# Preprocessing: keep it light so the parse stays fast and readable
+#---------------------------------------------------------------------------
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = NO
+SKIP_FUNCTION_MACROS   = YES
+INCLUDE_PATH           = .engine/runtime/include \
+                         .engine/recompiler/include

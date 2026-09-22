@@ -1,0 +1,6 @@
+{
+  "repository": "https://github.com/Alexbeav/psxrecomp.git",
+  "commit": "0c4dd09a06382cc65c5e1b866fd6efdba5d77381",
+  "commit_date": "2026-08-31",
+  "note": "Public engine head when this documentation was set up. The Diablo kit's setup-manifest.json pins runtime_commit 8c89c6f4, which is not on the public repository's history, so the documented tree is the closest public ancestor rather than the exact kit build."
+}
