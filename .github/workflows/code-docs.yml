@@ -32,9 +32,17 @@ jobs:
           python-version: "3.12"
 
       - name: Install generators
+        # Doxygen is pinned to the version the theme header was generated
+        # with (theme/header.html); Ubuntu's apt package is older and leaves
+        # newer template variables unresolved.
+        env:
+          DOXYGEN_VERSION: 1.10.0
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends doxygen graphviz
+          sudo apt-get install -y --no-install-recommends graphviz
+          curl -fsSL -o /tmp/doxygen.tgz "https://github.com/doxygen/doxygen/releases/download/Release_${DOXYGEN_VERSION//./_}/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz"
+          sudo tar -xzf /tmp/doxygen.tgz -C /opt
+          sudo ln -sf "/opt/doxygen-${DOXYGEN_VERSION}/bin/doxygen" /usr/local/bin/doxygen
           python -m pip install --upgrade pip
           python -m pip install mkdocs-material
           doxygen --version

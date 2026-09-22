@@ -57,7 +57,10 @@ def main() -> int:
     # sees. Report those separately and do not fail on them.
     def upstream(page: str, target: str) -> bool:
         base = os.path.basename(page)
-        return base.startswith('md_') or target.startswith('namespace')
+        # A "$name" target is an unexpanded Doxygen template variable, which
+        # happens when the installed Doxygen is older than the one that
+        # generated theme/header.html; report it, but as a soft miss.
+        return base.startswith('md_') or target.startswith('namespace') or target.startswith('$')
 
     hard = [(p, t) for p, t in missing if not upstream(p, t)]
     soft = [(p, t) for p, t in missing if upstream(p, t)]
