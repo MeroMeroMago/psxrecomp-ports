@@ -15,6 +15,9 @@ import sys
 from urllib.parse import unquote, urlsplit
 
 ATTR = re.compile(r'\b(?:href|src)\s*=\s*["\']([^"\']+)["\']', re.I)
+# Embedded source listings (guide snippets, Doxygen source pages) can contain
+# literal href/src text that is code, not markup; skip everything inside <pre>.
+PRE = re.compile(r'<pre\b.*?</pre>', re.I | re.S)
 
 
 def main() -> int:
@@ -33,6 +36,7 @@ def main() -> int:
                 text = open(page, encoding='utf-8', errors='replace').read()
             except OSError:
                 continue
+            text = PRE.sub('', text)
             for raw in ATTR.findall(text):
                 target = html.unescape(raw).strip()
                 parts = urlsplit(target)
